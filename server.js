@@ -1,21 +1,26 @@
-require('dotenv').config()
 const express = require('express')
 const app = express()
 
 // connect DB
-const connectDB = require('./db/connect')
-
-app.use(express.json())
+const db = require('./db/connect')
 
 const PORT = process.env.PORT || 3001
 
-const start = async () => {
-  try {
-    await connectDB(process.env.SECRET_KEY)
-    app.listen(PORT, console.log(`Server is listening on port ${PORT}...`))
-  } catch (error) {
-    console.log(error)
-  }
-}
+app.use(express.json())
 
-start()
+app.get('/api/v1/employees', (req, res) => {
+  const sql = `SELECT * FROM employee`
+
+  db.query(sql, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message })
+      return
+    }
+    res.json({
+      message: 'success',
+      data: rows,
+    })
+  })
+})
+
+app.listen(PORT, console.log(`Server is listening on port ${PORT}...`))
