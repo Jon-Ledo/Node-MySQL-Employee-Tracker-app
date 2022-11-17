@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const inquirer = require('inquirer')
 const prompt = require('./prompt')
+const cTable = require('console.table')
 
 // connect DB
 const db = require('./db/connect')
@@ -10,33 +11,42 @@ const PORT = process.env.PORT || 3001
 
 app.use(express.json())
 
-app.get('/api/v1/department', (req, res) => {
-  const sql = `SELECT * FROM department`
-
+function queryDB(sql) {
+  // sql statement comes from prompt conditionals
   db.query(sql, (err, rows) => {
     if (err) {
-      res.status(500).json({ error: err.message })
+      console.log(err)
       return
     }
-    res.json({
-      message: 'success',
-      data: rows,
-    })
+    // display info in table
+    const table = cTable.getTable(rows)
+    console.log(table)
+    askPrompt()
   })
-})
+}
 
 function askPrompt() {
   inquirer.prompt(prompt).then((answers) => {
+    // departments
     if (answers.choice === 'view all departments') {
-      // app.get('api/v1/departments', (req, res) => {
-      //   console.log(res)
-      //   console.log(req)
-      // })
+      const sql = `SELECT * FROM department`
+      queryDB(sql)
     }
+    if (answers.choice === 'view all roles') {
+      const sql = `SELECT * FROM role`
+      queryDB(sql)
+    }
+    if (answers.choice === 'view all employees') {
+      const sql = `SELECT * FROM employee`
+      queryDB(sql)
+    }
+    return
   })
 }
 
 app.listen(PORT, console.log(`Server is listening on port ${PORT}...`))
+
+askPrompt()
 
 // WHEN I start the application
 // THEN I am presented with the following options:
@@ -48,12 +58,6 @@ app.listen(PORT, console.log(`Server is listening on port ${PORT}...`))
 // add a role,              --> POST API
 // add an employee, and     --> POST API
 // update an employee role  --> PATCH API
-
-// WHEN I choose to view all departments
-// THEN I am presented with a formatted table showing department names and department ids
-
-// WHEN I choose to view all roles
-// THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
 
 // WHEN I choose to view all employees
 // THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
