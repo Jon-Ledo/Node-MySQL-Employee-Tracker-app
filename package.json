@@ -1,0 +1,32 @@
+{
+  "name": "node-mysql-employee-tracker-app",
+  "version": "1.0.0",
+  "description": "MySQL.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jon-Ledo/Node-MySQL-Employee-Tracker-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jon-Ledo/Node-MySQL-Employee-Tracker-app/issues"
+  },
+  "homepage": "https://github.com/Jon-Ledo/Node-MySQL-Employee-Tracker-app#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "inquirer": "^9.1.4",
+    "mysql2": "^2.3.3",
+    "node": "^19.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
