@@ -11,6 +11,7 @@ const prompt = [
       'add a role',
       'add an employee',
       'update an employee role',
+      'Exit',
     ],
   },
 ]
