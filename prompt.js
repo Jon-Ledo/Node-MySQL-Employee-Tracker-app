@@ -16,4 +16,18 @@ const prompt = [
   },
 ]
 
-module.exports = prompt
+const POSTpromptDept = [
+  {
+    type: 'input',
+    name: 'department',
+    message: 'What department are you adding?',
+    validate: (value) => {
+      if (!value) {
+        console.log('Please enter a department name')
+        return false
+      } else return true
+    },
+  },
+]
+
+module.exports = { prompt, POSTpromptDept }

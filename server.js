@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const inquirer = require('inquirer')
-const prompt = require('./prompt')
+const { prompt, POSTpromptDept } = require('./prompt')
 const cTable = require('console.table')
 
 // connect DB
@@ -11,9 +11,9 @@ const PORT = process.env.PORT || 3001
 
 app.use(express.json())
 
-function queryDB(sql) {
+function queryDB(sql, params) {
   // sql statement comes from prompt conditionals
-  db.query(sql, (err, rows) => {
+  db.query(sql, params, (err, rows) => {
     if (err) {
       console.log(err)
       return
@@ -40,8 +40,21 @@ function askPrompt() {
       const sql = `SELECT * FROM employee`
       queryDB(sql)
     }
+
+    // POST a department
+    if (answers.choice === 'add a department') {
+      // open new prompt
+      inquirer.prompt(POSTpromptDept).then((answers) => {
+        postdept(answers.department)
+      })
+    }
     return
   })
+}
+
+function postdept(answer) {
+  const sql = `INSERT INTO department (name) VALUES (?)`
+  queryDB(sql, answer)
 }
 
 app.listen(PORT, console.log(`Server is listening on port ${PORT}...`))
