@@ -10,7 +10,7 @@ const prompt = [
       'add a department',
       'add a role',
       'add an employee',
-      'update an employee role',
+      'update an employee',
       'Exit',
     ],
   },
@@ -30,4 +30,92 @@ const POSTpromptDept = [
   },
 ]
 
-module.exports = { prompt, POSTpromptDept }
+const POSTpromptRole = [
+  {
+    type: 'input',
+    name: 'title',
+    message: 'What role are you adding?',
+    validate: (value) => {
+      if (!value) {
+        console.log('Please enter a role name')
+        return false
+      } else return true
+    },
+  },
+  {
+    type: 'number',
+    name: 'salary',
+    message: 'Starting hourly rate? (ex. 18.50)',
+    // validate: (value) => {
+    //   if (isNaN(value)) {
+    //     console.log(
+    //       'Please enter the hourly rate(ex. 18.50 numbers and decimal only)'
+    //     )
+    //     return false
+    //   } else {
+    //     value = Number(value)
+    //     return true
+    //   }
+    // },
+  },
+  {
+    type: 'number',
+    name: 'department_id',
+    message: 'What department is the role for? (use ID # only)',
+    // validate: (value) => {
+    //   if (!value) {
+    //     console.log('Please enter the department\'s ID ')
+    //     return false
+    //   } else return true
+    // },
+  },
+]
+
+const POSTpromptEmployee = [
+  {
+    type: 'input',
+    name: 'first_name',
+    message: 'Enter first name',
+    validate: (value) => {
+      if (!value) {
+        console.log('Please enter a first name')
+        return false
+      } else return true
+    },
+  },
+  {
+    type: 'input',
+    name: 'last_name',
+    message: 'Enter last name',
+    validate: (value) => {
+      if (!value) {
+        console.log('Please enter a last name')
+        return false
+      } else return true
+    },
+  },
+  {
+    type: 'number',
+    name: 'role_id',
+    message: 'Enter the role ID',
+    // validate: (value) => {
+    //   if (!value) {
+    //     console.log('Please enter a first name')
+    //     return false
+    //   } else return true
+    // },
+  },
+  {
+    type: 'number',
+    name: 'manager_id',
+    message: "Enter direct manager's ID",
+    // validate: (value) => {
+    //   if (!value) {
+    //     console.log('Please enter a first name')
+    //     return false
+    //   } else return true
+    // },
+  },
+]
+
+module.exports = { prompt, POSTpromptDept, POSTpromptRole, POSTpromptEmployee }
