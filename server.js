@@ -18,7 +18,6 @@ app.use(express.json())
 
 function queryDB(sql, ...params) {
   // sql statement comes from prompt conditionals
-  // db.connect()
   db.query(sql, ...params, (err, rows) => {
     if (err) {
       console.log(err)
@@ -73,17 +72,9 @@ function askPrompt() {
     }
 
     // UPDATE an employee
-    // if (answers.choice === 'update an employee') {
-    //   inquirer.prompt(UPDATEprompt).then((answers) => {
-    //     updateEmployee()
-    //   })
-    // }
-
-    // Exit
-    // if (answers.choice === 'Exit') {
-    //   return
-    // }
-
+    if (answers.choice === 'update an employee') {
+      updateEmployee()
+    }
     return
   })
 }
@@ -111,6 +102,60 @@ function postEmployee(answers) {
   console.log(
     `New employee, ${answers.first_name} ${answers.last_name} added to database`
   )
+}
+
+function updateEmployee() {
+  db.query(`SELECT first_name, last_name, id FROM employee`, (err, rows) => {
+    if (err) {
+      console.log(err)
+      return
+    }
+
+    const dataArray = rows.map((row) => {
+      return {
+        id: `${row.id}`,
+        name: `${row.first_name} ${row.last_name}`,
+      }
+    })
+
+    inquirer
+      .prompt([
+        {
+          type: 'list',
+          name: 'selectedEmployee',
+          message: 'Who would you like to update?',
+          choices: dataArray,
+        },
+      ])
+      .then((answer) => {
+        const employeeToUpdate = answer.selectedEmployee // firstName LastName -> for user readability
+        const findID = dataArray.find((employee) => {
+          return employee.name === employeeToUpdate
+        }) // {name, id}
+        const id = +findID.id
+        console.log(typeof id, id)
+
+        // query to select role from list
+        // new inquirer prompt
+
+        // inquirer
+        //   .prompt([
+        //     {
+        //       type: 'input',
+        //       name: 'newRole',
+        //       message: "What is this employee's new role?",
+        //     },
+        //   ])
+        //   .then((answer) => {
+        //     const newRole = answer.newRole
+
+        //     // pinpoint query using id
+
+        //     const sql = `UPDATE employee SET role_id = ? WHERE id = ?`
+        //     db.query(sql, [44, id])
+        //   })
+      })
+  })
 }
 
 app.listen(PORT, console.log(`Server is listening on port ${PORT}...`))
