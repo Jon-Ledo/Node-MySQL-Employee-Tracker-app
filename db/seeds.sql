@@ -15,11 +15,11 @@ VALUES 	('foods_manager', 20, 1),
         ('store_manager', 28, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES 	('Korey', 'Olson', 1, 1),
+VALUES 	('Korey', 'Olson', 1, 7),
 	('Gale', 'Spencer', 2, 1),
-        ('Alex', 'Vega', 3, 3),
+        ('Alex', 'Vega', 3, 7),
         ('Amy', 'Sexton', 4, 3),
-        ('Denise', 'Klein', 5, 5),
+        ('Denise', 'Klein', 5, 7),
         ('Olivia', 'Simmons', 6, 5);
         
 INSERT INTO employee (first_name, last_name, role_id)
