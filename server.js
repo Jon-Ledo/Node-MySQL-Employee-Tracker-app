@@ -111,6 +111,7 @@ function updateEmployee() {
       return
     }
 
+    // get data for user to select
     const dataArray = rows.map((row) => {
       return {
         id: `${row.id}`,
@@ -118,6 +119,7 @@ function updateEmployee() {
       }
     })
 
+    // prompt to select an employee using returned array
     inquirer
       .prompt([
         {
@@ -132,28 +134,46 @@ function updateEmployee() {
         const findID = dataArray.find((employee) => {
           return employee.name === employeeToUpdate
         }) // {name, id}
-        const id = +findID.id
-        console.log(typeof id, id)
+        const employeeID = +findID.id
 
         // query to select role from list
-        // new inquirer prompt
+        db.query(`SELECT id, title, department_id FROM role`, (err, rows) => {
+          if (err) {
+            console.log(err)
+            return
+          }
 
-        // inquirer
-        //   .prompt([
-        //     {
-        //       type: 'input',
-        //       name: 'newRole',
-        //       message: "What is this employee's new role?",
-        //     },
-        //   ])
-        //   .then((answer) => {
-        //     const newRole = answer.newRole
+          const rolesArray = rows.map((row) => {
+            return {
+              name: `${row.title}`,
+              id: `${row.id}`,
+              department_id: `${row.department_id}`,
+            }
+          })
 
-        //     // pinpoint query using id
+          // prompt to choose pre-existing department
+          inquirer
+            .prompt([
+              {
+                type: 'list',
+                name: 'selectedDepartment',
+                message: `What role should ${employeeToUpdate} be in?`,
+                choices: rolesArray,
+              },
+            ])
+            .then((answer) => {
+              const newRole = answer.selectedDepartment
+              const findRoleID = rolesArray.find((role) => {
+                return role.name === newRole
+              })
 
-        //     const sql = `UPDATE employee SET role_id = ? WHERE id = ?`
-        //     db.query(sql, [44, id])
-        //   })
+              const roleID = +findRoleID.id
+
+              // pinpoint query using two IDs
+              const sql = `UPDATE employee SET role_id = ? WHERE id = ?`
+              db.query(sql, [roleID, employeeID])
+            })
+        })
       })
   })
 }
